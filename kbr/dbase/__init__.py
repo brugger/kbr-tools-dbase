@@ -6,7 +6,7 @@ Generica low level function for interacting with a database through the records 
 """
 
 
-import sys
+import re
 import os
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -38,6 +38,9 @@ class DB( object ):
         if url.startswith('sqlite'):
             self._fetchall = True
         
+
+    def uri_split(uri:str) -> dict:
+        return re.match('((?P<connector>.*)):\/\/((?P<user>.*):)((?P<pass>.*)@)((?P<host>.*)/)((?P<db>.*))', uri).groupdict()
 
     def close(self):
         """ Closes the db connection
@@ -74,7 +77,7 @@ class DB( object ):
             
             self.do(command)
 
-    def table_names(self) -> []:
+    def table_names(self) -> list:
         """ get the names of the tables in the database
 
         Args:
@@ -98,9 +101,9 @@ class DB( object ):
         return True
 
     def drop_tables(self) -> None:
-        """ Delete all tables in a database, useful if resetting it during devlopment """
+        """ Delete all tables in a database, useful if resetting it during development """
         for table in self.table_names():
-            db.do("DROP table IF EXISTS {} CASCADE".format( table ))
+            self._db.do("DROP table IF EXISTS {} CASCADE".format( table ))
 
             
     def do(self, sql:str) -> None:
@@ -118,7 +121,7 @@ class DB( object ):
 
         return self._db.query( sql, fetchall=self._fetchall )
 
-    def get_as_dict(self, sql:str) -> {}:
+    def get_as_dict(self, sql:str) -> dict:
         """ executes a query and returns the data as a dict
 
         Args:
@@ -152,7 +155,7 @@ class DB( object ):
 
             
 
-    def get(self, table, logic:str='AND', order:str=None, limit:int=None, offset:int=None, **values ) -> {}:
+    def get(self, table, logic:str='AND', order:str=None, limit:int=None, offset:int=None, **values ) -> dict:
         q = "SELECT * FROM {table} ".format( table = table )
 
         filters = []
@@ -178,7 +181,7 @@ class DB( object ):
         return self.get_as_dict( q )
 
 
-    def get_single(self, table, **values ) -> {}:
+    def get_single(self, table, **values ) -> dict:
 
         values = self.get(table, **values)
         if len( values ) > 1:
@@ -198,7 +201,7 @@ class DB( object ):
         return self.get(table=table, order=order)
 
     
-    def get_by_id(self, table, value ) -> {}:
+    def get_by_id(self, table, value ) -> dict:
         return self.get( table, id=value)
 
 
@@ -221,7 +224,7 @@ class DB( object ):
             return  ids
 
     
-    def add( self, table:str, entry:{}):
+    def add( self, table:str, entry:dict):
 
         if entry == {}:
             raise RuntimeError('No values provided')
@@ -236,7 +239,7 @@ class DB( object ):
 
 
 
-    def add_unique( self, table:str, entry:{}, key:str):
+    def add_unique( self, table:str, entry:dict, key:str):
         if entry == {}:
             raise RuntimeError('No values provided')
 
@@ -253,7 +256,7 @@ class DB( object ):
         return self.get_id( table, **{key: entry[ key ]})
 
         
-    def add_bulk( self, table:str, entries:[] ):
+    def add_bulk( self, table:str, entries:list ):
 
 
         if entries == [] or entries == {}:
@@ -278,7 +281,7 @@ class DB( object ):
 
                             
                 
-    def update(self, table:str, entry:{}, conditions:{}):
+    def update(self, table:str, entry:dict, conditions:dict):
         
         if entry == {}:
             raise RuntimeError('No values provided')
