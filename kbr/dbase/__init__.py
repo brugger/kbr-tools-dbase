@@ -18,7 +18,7 @@ import records
 
 class DB( object ):
 
-    def __init__( self, url:str) -> bool:
+    def __init__( self, url:str, **kwargs) -> object:
         """ connects to a database instance 
 
         Args:
@@ -33,7 +33,7 @@ class DB( object ):
 
         """
     
-        self._db = records.Database( url )
+        self._db = records.Database( url, **kwargs )
         self._fetchall = False
         if url.startswith('sqlite'):
             self._fetchall = True
@@ -103,7 +103,7 @@ class DB( object ):
     def drop_tables(self) -> None:
         """ Delete all tables in a database, useful if resetting it during development """
         for table in self.table_names():
-            self._db.do("DROP table IF EXISTS {} CASCADE".format( table ))
+            self.do("DROP table IF EXISTS {} CASCADE".format( table ))
 
             
     def do(self, sql:str) -> None:
