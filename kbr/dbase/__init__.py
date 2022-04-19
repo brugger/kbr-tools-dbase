@@ -18,7 +18,7 @@ import records
 
 class DB( object ):
 
-    def __init__( self, url:str, **kwargs) -> object:
+    def __init__( self, uri:str, **kwargs) -> object:
         """ connects to a database instance 
 
         Args:
@@ -33,13 +33,17 @@ class DB( object ):
 
         """
     
-        self._db = records.Database( url, **kwargs )
+        self._db = records.Database( uri, **kwargs )
+        self._uri = uri
         self._fetchall = False
-        if url.startswith('sqlite'):
+        if uri.startswith('sqlite'):
             self._fetchall = True
         
 
-    def uri_split(uri:str) -> dict:
+    def uri_split(self, uri:str=None``) -> dict:
+        if uri is None:
+            uri = self._uri
+            
         return re.match('((?P<connector>.*)):\/\/((?P<user>.*):)((?P<pass>.*)@)((?P<host>.*)/)((?P<db>.*))', uri).groupdict()
 
     def close(self):
