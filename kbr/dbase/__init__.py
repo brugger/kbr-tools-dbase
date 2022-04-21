@@ -13,7 +13,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 import records
 
-
+import kbr.type_utils as type_utils
 
 
 class DB( object ):
@@ -210,6 +210,8 @@ class DB( object ):
 
 
     def escape_string(self, string):
+        if type_utils.is_number(string):
+            return "{}".format( string )
 
         return "'{}'".format( string )
     
@@ -326,6 +328,11 @@ class DB( object ):
                                                          id=id)
         self.do( q )
 
+
+    def purge(self, table:str):
+        
+        q = "DELETE FROM  {table}")
+        self.do( q )
 
 
 
