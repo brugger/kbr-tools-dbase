@@ -40,7 +40,7 @@ class DB( object ):
             self._fetchall = True
         
 
-    def uri_split(self, uri:str=None``) -> dict:
+    def uri_split(self, uri:str=None) -> dict:
         if uri is None:
             uri = self._uri
             
@@ -330,9 +330,7 @@ class DB( object ):
 
 
     def purge(self, table:str):
-        
-        q = "DELETE FROM  {table}")
-        self.do( q )
+        self.do( f"DELETE FROM  {table}" )
 
 
 
