@@ -206,7 +206,7 @@ class DB( object ):
 
     
     def get_by_id(self, table, value ) -> dict:
-        return self.get( table, id=value)
+        return self.get_single( table, id=value)
 
 
     def escape_string(self, string):
