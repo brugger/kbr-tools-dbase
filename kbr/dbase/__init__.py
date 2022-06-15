@@ -212,6 +212,9 @@ class DB( object ):
     def escape_string(self, string):
         if type_utils.is_number(string):
             return "{}".format( string )
+        elif string is None:
+            return 'NULL'
+
 
         return "'{}'".format( string )
     
