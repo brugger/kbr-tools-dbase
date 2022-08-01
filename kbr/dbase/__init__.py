@@ -304,15 +304,14 @@ class DB( object ):
             if ( key in conditions ):
                 continue
             
-            updates.append( "{key} = '{value}'".format( key=key, value=value))
+            updates.append( "{key} = {value}".format( key=key, value=self.escape_string(value)))
 
         conds = []
         for key in conditions:
             #if ( key not in entry ):
             #    raise RuntimeError('condition key not in the entry dict')
 
-            conds.append( "{key} = '{value}'".format( key=key, value=conditions[ key ]))
-
+            conds.append( "{key} = {value}".format( key=key, value=self.escape_string(conditions[ key ])))
 
 
         
