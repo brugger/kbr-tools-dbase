@@ -104,10 +104,16 @@ class DB( object ):
 
         return True
 
+    def drop_table(self, table_name) -> None:
+        """ Delete a table in a database, useful if resetting it during development """
+        self.do("DROP table IF EXISTS {} CASCADE".format( table_name ))
+
+
     def drop_tables(self) -> None:
         """ Delete all tables in a database, useful if resetting it during development """
         for table in self.table_names():
-            self.do("DROP table IF EXISTS {} CASCADE".format( table ))
+            self.drop_table( table )
+#            self.do("DROP table IF EXISTS {} CASCADE".format( table ))
 
             
     def do(self, sql:str) -> None:
