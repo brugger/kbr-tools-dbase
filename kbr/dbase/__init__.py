@@ -172,7 +172,8 @@ class DB( object ):
 
         for key in values.keys():
             if ( values[ key ] is not None):
-                filters.append( " {key} = '{value}'".format( key=key, value=values[ key ]))
+#                filters.append( " {key} = '{value}'".format( key=key, value=values[ key ]))
+                filters.append( " {key} = '{value}'".format( key=key, value=re.sub("'", "''", str(values[ key ]))))
 
         if ( filters != []):
             q += " WHERE " + "  {} ".format( logic ).join( filters )
@@ -222,6 +223,7 @@ class DB( object ):
             return 'NULL'
 
 
+        string = re.sub(r"'", "''", str(string))
         return "'{}'".format( string )
     
     
