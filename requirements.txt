@@ -1,3 +1,4 @@
 psycopg2-binary
 SQLAlchemy
 records@git+https://github.com/brugger/records.git
+kbr@git+https://github.com/brugger/kbr-tools.git@2_0
