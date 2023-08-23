@@ -174,6 +174,8 @@ class DB( object ):
             if ( values[ key ] is not None):
 #                filters.append( " {key} = '{value}'".format( key=key, value=values[ key ]))
                 filters.append( " {key} = '{value}'".format( key=key, value=re.sub("'", "''", str(values[ key ]))))
+            else:
+                filters.append( " {key} is NULL".format( key=key))                
 
         if ( filters != []):
             q += " WHERE " + "  {} ".format( logic ).join( filters )
