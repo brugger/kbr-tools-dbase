@@ -38,6 +38,7 @@ class DB( object ):
         self._fetchall = False
         if uri.startswith('sqlite'):
             self._fetchall = True
+            self._sqlite = True
         
 
     def uri_split(self, uri:str=None) -> dict:
@@ -226,6 +227,9 @@ class DB( object ):
 
 
         string = re.sub(r"'", "''", str(string))
+        if self._sqlite:
+            string = re.sub(r":", "\\:", str(string))
+
         return "'{}'".format( string )
     
     
