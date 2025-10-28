@@ -12,7 +12,6 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 import records
-
 import kbr.type_utils as type_utils
 
 
@@ -36,6 +35,7 @@ class DB( object ):
         self._db = records.Database( uri, **kwargs )
         self._uri = uri
         self._fetchall = False
+        self._sqlite = False
         if uri.startswith('sqlite'):
             self._fetchall = True
             self._sqlite = True
@@ -130,6 +130,8 @@ class DB( object ):
           None
         """
 
+
+
         return self._db.query( sql, fetchall=self._fetchall )
 
     def get_as_dict(self, sql:str) -> dict:
@@ -194,6 +196,9 @@ class DB( object ):
 
         if offset is not None:
             q += " offset {} ".format( offset )
+
+
+#        print("SQL",  q, flush=True)
 
             
         return self.get_as_dict( q )
